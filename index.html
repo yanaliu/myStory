@@ -4,19 +4,21 @@
     <meta charset="UTF-8">
     <title>myStory</title>
     <link rel="stylesheet" href="css/index.css">
+    <script src="js/index.js"></script>
+    <script src="js/data.js"></script>
 </head>
 <body onselelctstart="return false;">
-    <div class="wrap">
+    <div class="wrap" id="wrap">
         <!--photo负责平移和旋转-->
-        <div class="photo photo_center">
+        <div class="photo photo_front" onclick="turn(this)" id="photo_{{index}}">
             <!--photo_wrap 负责翻转-->
             <div class="photo_wrap">
                 <div class="side side_front">
-                    <p class="img"><img src="./img/timg.jpg" alt=""></p>
-                    <p class="caption">可爱的小鱼</p>
+                    <p class="img"><img src="./img/{{img}}" alt=""></p>
+                    <p class="caption">{{caption}}</p>
                 </div>
                 <div class="side side_back">
-                    <p class="desc">描述信息</p>
+                    <p class="desc">{{desc}}</p>
                 </div>
             </div>
         </div>
