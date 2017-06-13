@@ -1,13 +1,29 @@
 /**
  * Created by Administrator on 2017/6/12.
  */
+
+var changed = true;
+
+function change() {
+    changed = !changed;
+    rsort(random([0, data.length]));
+}
+
 //点击图片翻转
 function turn(elem) {
     var cls = elem.className;
+    var n = elem.id.split("_")[1];
+
+    if(!/photo_center/.test(cls)) {
+        return rsort(n);
+    }
+
     if(/photo_front/.test(cls)) {
         cls = cls.replace(/photo_front/, 'photo_back');
+        g("#nav_" + n).className += " i_back";
     } else {
         cls = cls.replace(/photo_back/, 'photo_front');
+        g("#nav_" + n).className = g("#nav_" + n).className.replace(/\s*i_back\s*/, ' ');
     }
     return elem.className = cls;
 }
@@ -55,6 +71,15 @@ function rsort(n) {
     var photos = [];
     for(var s  = 0; s < _photo.length; s++) {
         _photo[s].className = _photo[s].className.replace(/ \s*photo_center\s*/, " ");
+        _photo[s].className = _photo[s].className.replace(/ \s*photo_front\s*/, " ");
+        _photo[s].className = _photo[s].className.replace(/ \s*photo_back\s*/, " ");
+
+        _photo[s].className += " photo_front ";
+
+        _photo[s].style.left="";
+        _photo[s].style.top="";
+        _photo[s].style["-webkit-transform"]="rotate(360deg) scale(1.3)";
+
         photos.push(_photo[s]);
     }
     var photo_center = g("#photo_" + n);
@@ -69,24 +94,32 @@ function rsort(n) {
     var ranges = range();
     for(var s in photos_left) {
         var photo = photos_left[s];
-        photo.style.left = random(ranges.left.x) + "px";
-        photo.style.top = random(ranges.left.y) + "px";
-        photo.style["-webkit-transform"] = "rotate("+random([-150, 150])+"deg)";
+        if(changed) {
+            photo.style.left = random(ranges.left.x) + "px";
+            photo.style.top = random(ranges.left.y) + "px";
+            photo.style["-webkit-transform"] = "rotate("+random([-150, 150])+"deg) scale(1)";
+        } else {
+            photo.style["transform"] = "rotate(" + random([-60, 60]) + "deg) scale(1) translate(600px)";
+        }
     }
 
     for(var s in photos_right) {
         var photo = photos_right[s];
-        photo.style.left = random(ranges.right.x) + "px";
-        photo.style.top = random(ranges.right.y) + "px";
-        photo.style["-webkit-transform"] = "rotate("+random([-150, 150])+"deg)";
+        if(changed) {
+            photo.style.left = random(ranges.right.x) + "px";
+            photo.style.top = random(ranges.right.y) + "px";
+            photo.style["-webkit-transform"] = "rotate("+random([-150, 150])+"deg) scale(1)";
+        } else {
+            photo.style["transform"] = "rotate(" + random([-60, 60]) + "deg) scale(1) translate(-600px)";
+        }
     }
 
     var navs = g(".i");
     for(var i = 0; i < navs.length; i++) {
         navs[i].className = navs[i].className.replace(/\s*i_current\s*/, " ");
-        navs[i].className = navs[i].className.replace(/\s*i_back\s*/, " ")
+        navs[i].className = navs[i].className.replace(/\s*i_back\s*/, " ");
     }
-    g("#nav_" + n).className += " i_current "
+    g("#nav_" + n).className += " i_current ";
 }
 
 //通过模板代码增加所有的照片
